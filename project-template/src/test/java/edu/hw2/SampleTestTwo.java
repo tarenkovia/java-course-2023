@@ -83,43 +83,66 @@ public class SampleTestTwo {
     }
 
     @ParameterizedTest
-    @MethodSource("data_for_DefaultConnection")
-    @DisplayName("Удаленный сервер - Default")
-    void defaultConnection_validInputString_successTest(double frequency, String command) throws Exception {
+    @MethodSource("data_for_DefaultConnectionNegative")
+    @DisplayName("Удаленный сервер - Default Negative")
+    void defaultConnectionNegative_validInputString_successTest(double frequency, String command) throws Exception {
         ConnectionManager manager = new DefaultConnectionManager(frequency);
         Connection connection = manager.getConnection();
-        connection.execute(command);
-        try {
-            connection.close();
-        } catch (Exception e) {
-            throw new ConnectionException(new RuntimeException("Connection error"));
-        }
-        assertThrows(IllegalStateException.class, () -> connection.execute(command));
+        assertThrows(RuntimeException.class, () -> connection.execute(command));
     }
-    private static Stream<Arguments> data_for_DefaultConnection() {
+    private static Stream<Arguments> data_for_DefaultConnectionNegative() {
         return Stream.of(
-            Arguments.of(105.25, "gogo"),
-            Arguments.of(150.25, "ls")
+            Arguments.of(300.25, "gogo"),
+            Arguments.of(289.25, "ls")
         );
     }
 
     @ParameterizedTest
-    @MethodSource("data_for_FaultyConnection")
-    @DisplayName("Удаленный сервер - Faulty")
-    void faultyConnection_validInputString_successTest(double frequency, String command) throws Exception {
-        ConnectionManager manager = new FaultyConnectionManager(frequency);
+    @MethodSource("data_for_DefaultConnectionPositive")
+    @DisplayName("Удаленный сервер - Default Positive")
+    void defaultConnectionPositive_validInputString_successTest(double frequency, String command) throws Exception {
+        ConnectionManager manager = new DefaultConnectionManager(frequency);
         Connection connection = manager.getConnection();
-        try {
-            connection.close();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        connection.execute(command);
+        connection.close();
         assertThrows(IllegalStateException.class, () -> connection.execute(command));
     }
-    private static Stream<Arguments> data_for_FaultyConnection() {
+    private static Stream<Arguments> data_for_DefaultConnectionPositive() {
         return Stream.of(
             Arguments.of(105.25, "gogo"),
-            Arguments.of(150.25, "ls")
+            Arguments.of(102.25, "ls")
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("data_for_FaultyConnectionNegative")
+    @DisplayName("Удаленный сервер - Faulty Negative")
+    void faultyConnectionNegative_validInputString_successTest(double frequency, String command) throws Exception {
+        ConnectionManager manager = new FaultyConnectionManager(frequency);
+        Connection connection = manager.getConnection();
+        assertThrows(RuntimeException.class, () -> connection.execute(command));
+    }
+    private static Stream<Arguments> data_for_FaultyConnectionNegative() {
+        return Stream.of(
+            Arguments.of(400.25, "gogo"),
+            Arguments.of(500.25, "ls")
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("data_for_FaultyConnectionPositive")
+    @DisplayName("Удаленный сервер - Faulty Positive")
+    void faultyConnectionPositive_validInputString_successTest(double frequency, String command) throws Exception {
+        ConnectionManager manager = new FaultyConnectionManager(frequency);
+        Connection connection = manager.getConnection();
+        connection.execute(command);
+        connection.close();
+        assertThrows(IllegalStateException.class, () -> connection.execute(command));
+    }
+    private static Stream<Arguments> data_for_FaultyConnectionPositive() {
+        return Stream.of(
+            Arguments.of(80.25, "gogo"),
+            Arguments.of(50.25, "ls")
         );
     }
 

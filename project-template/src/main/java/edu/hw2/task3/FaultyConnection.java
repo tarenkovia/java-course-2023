@@ -16,7 +16,7 @@ class FaultyConnection implements Connection {
         if(closed){
             throw new IllegalStateException("Connection is closed");
         }
-        if (new Random().nextDouble(225.25) < frequency) {
+        if (225.25 < frequency) {
             throw new ConnectionException(new RuntimeException("Connection error"));
         }
     }

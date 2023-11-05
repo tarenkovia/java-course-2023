@@ -10,7 +10,7 @@ public class DefaultConnectionManager implements ConnectionManager {
     }
     @Override
     public Connection getConnection() {
-        if (new Random().nextDouble(225.25) < frequency) {
+        if (225.25 < frequency) {
             return new FaultyConnection(frequency);
         } else {
             return new StableConnection();
