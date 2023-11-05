@@ -85,7 +85,7 @@ public class SampleTestTwo {
     @ParameterizedTest
     @MethodSource("data_for_DefaultConnection")
     @DisplayName("Удаленный сервер - Default")
-    void DefaultConnection_validInputString_successTest(double frequency, String command) throws Exception {
+    void defaultConnection_validInputString_successTest(double frequency, String command) throws Exception {
         ConnectionManager manager = new DefaultConnectionManager(frequency);
         Connection connection = manager.getConnection();
         connection.execute(command);
@@ -94,6 +94,7 @@ public class SampleTestTwo {
         } catch (Exception e) {
             throw new ConnectionException(new RuntimeException("Connection error"));
         }
+        assertThrows(IllegalStateException.class, () -> connection.execute(command));
     }
     private static Stream<Arguments> data_for_DefaultConnection() {
         return Stream.of(
@@ -105,7 +106,7 @@ public class SampleTestTwo {
     @ParameterizedTest
     @MethodSource("data_for_FaultyConnection")
     @DisplayName("Удаленный сервер - Faulty")
-    void FaultyConnection_validInputString_successTest(double frequency, String command) throws Exception {
+    void faultyConnection_validInputString_successTest(double frequency, String command) throws Exception {
         ConnectionManager manager = new FaultyConnectionManager(frequency);
         Connection connection = manager.getConnection();
         try {
@@ -125,7 +126,7 @@ public class SampleTestTwo {
     @ParameterizedTest
     @MethodSource("data_for_PopularCommand")
     @DisplayName("Удаленный сервер - Popular Command")
-    void PopularCommand_validInputString_successTest(double frequency, int attempts) throws Exception {
+    void popularCommand_validInputString_successTest(double frequency, int attempts) throws Exception {
         ConnectionManager manager = new DefaultConnectionManager(frequency);
         PopularCommandExecutor executor = new PopularCommandExecutor(manager, attempts);
         executor.updatePackages();
