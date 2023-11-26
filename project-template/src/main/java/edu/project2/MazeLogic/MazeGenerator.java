@@ -28,21 +28,7 @@ public class MazeGenerator implements Generator {
         }
 
         for (int row = 0; row < height - 2; row += 2) {
-            for (int col = 0; col < width - 2; col += 2) {
-                if (random.nextBoolean()) {
-                    int hallwayWidth = 1;
-                    int hallwayStart = random.nextInt(width - col - hallwayWidth) + col;
-                    for (int i = hallwayStart; i < hallwayStart + hallwayWidth; i++) {
-                        grid[row][i] = new Cell(row, i, Cell.Type.HALLWAY);
-                    }
-                } else {
-                    int hallwayWidth = 1;
-                    int hallwayStart = random.nextInt(height - row - hallwayWidth) + row;
-                    for (int i = hallwayStart; i < hallwayStart + hallwayWidth; i++) {
-                        grid[i][col] = new Cell(i, col, Cell.Type.HALLWAY);
-                    }
-                }
-            }
+            generateHallwayByRow(row, width, random, grid, height);
         }
 
         Stack<Coordinates> stack = new Stack<>();
@@ -64,6 +50,26 @@ public class MazeGenerator implements Generator {
             }
         }
         return new Maze(height, width, grid);
+    }
+
+    private void generateHallwayByRow(int row, int width, Random random, Cell[][] grid, int height) {
+        for (int col = 0; col < width - 2; col += 2) {
+            if (random.nextBoolean()) {
+                int hallwayWidth = 1;
+                int hallwayStart = random.nextInt(width - col - hallwayWidth) + col;
+                generateHallway(hallwayStart, hallwayWidth, grid, row);
+            } else {
+                int hallwayWidth = 1;
+                int hallwayStart = random.nextInt(height - row - hallwayWidth) + row;
+                generateHallway(hallwayStart, hallwayWidth, grid, row);
+            }
+        }
+    }
+
+    private void generateHallway(int hallwayStart, int hallwayWidth, Cell[][] grid, int row) {
+        for (int i = hallwayStart; i < hallwayStart + hallwayWidth; i++) {
+            grid[row][i] = new Cell(row, i, Cell.Type.HALLWAY);
+        }
     }
 
     //проверяем соседние ячейки

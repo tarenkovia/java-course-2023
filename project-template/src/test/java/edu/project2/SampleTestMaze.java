@@ -39,12 +39,12 @@ public class SampleTestMaze {
     @MethodSource("dataForConsoleInterpreter")
     @DisplayName("Тест на консольный интерпритатор")
     void consoleInterpreter_validInputArrayList_successTest(Cell[][] grid, String input1, String input2) {
-        String res = input1 + input2;
-
+        String expectedResult = input1 + input2;
         Maze maze = new Maze(2, 2, grid);
-        Renderer result = new ConsoleInterpreter();
 
-        assertEquals(res, result.render(maze));
+        Renderer underTest = new ConsoleInterpreter();
+
+        assertEquals(expectedResult, underTest.render(maze));
     }
 
     private static Stream<Arguments> dataForConsoleInterpreter() {
@@ -84,7 +84,9 @@ public class SampleTestMaze {
     void mazeGenerator_validInputArrayList_successTest(int height, int width) {
         Random random = new Random();
         Generator generator = new MazeGenerator(random);
+
         Maze maze = generator.generate(height, width);
+        
         assertNotNull(maze);
     }
 
