@@ -21,25 +21,28 @@ import edu.hw3.task6.Stock;
 import edu.hw3.task6.StockMarket;
 import edu.hw3.task6.StockMarketImpl;
 import edu.hw3.task8.ReverseIterator;
+import edu.hw4.Animal;
+import edu.hw4.AnimalTasks;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
+import java.util.Optional;
 import static edu.hw2.task4.CallingInfo.callingInfo;
 import static edu.hw3.task2.ClusteringBrackets.clusterize;
 import static edu.hw3.task3.FrequencyOfWords.countOfWords;
 import static edu.hw3.task5.ContactlList.parseContacts;
 
-// Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
-// then press Enter. You can now see whitespace characters in your code.
+@SuppressWarnings("MagicNumber")
 public final class Main {
     private final static Logger LOGGER = LogManager.getLogger();
 
-    private Main() {}
+    private Main() {
+    }
 
-    public static void Hw1(){
+    public static void Hw1() {
         Task1 task1 = new Task1();
         String length = "01:00";
         int totalSeconds = task1.minutesToSeconds(length);
@@ -168,7 +171,7 @@ public final class Main {
         System.out.println(task8.knightBoardCapture(board2));
     }
 
-    public static void Hw2(){
+    public static void Hw2() {
         //task1
         Expr two = new Constant(2);
         Expr four = new Constant(4);
@@ -186,15 +189,12 @@ public final class Main {
         System.out.println("Called from " + info.className() + "#" + info.methodName());
     }
 
-
-    public static void main(String[] args) {
-        //Hw1();
-        //Hw2();
-
+    public static void Hw3() {
         //task1
         String encryptedText1 = AtbashCipher.encrypt("Hello, World!");
         System.out.println(encryptedText1);
-        String encryptedText2 = AtbashCipher.encrypt("Any fool can write code that a computer can understand. Good programmers write code that humans can understand. ― Martin Fowler");
+        String encryptedText2 = AtbashCipher.encrypt(
+            "Any fool can write code that a computer can understand. Good programmers write code that humans can understand. ― Martin Fowler");
         System.out.println(encryptedText2);
 
         System.out.println();
@@ -230,11 +230,11 @@ public final class Main {
 
         System.out.println();
         //task5
-        String[] contacts1 = { "John Locke", "Thomas Aquinas", "David Hume", "Rene Descartes" };
+        String[] contacts1 = {"John Locke", "Thomas Aquinas", "David Hume", "Rene Descartes"};
         String[] sortedContacts1 = parseContacts(contacts1, "ASC");
         System.out.println(Arrays.toString(sortedContacts1));
 
-        String[] contacts2 = { "Paul Erdos", "Leonhard Euler", "Carl Gauss" };
+        String[] contacts2 = {"Paul Erdos", "Leonhard Euler", "Carl Gauss"};
         String[] sortedContacts2 = parseContacts(contacts2, "DESC");
         System.out.println(Arrays.toString(sortedContacts2));
 
@@ -257,7 +257,6 @@ public final class Main {
 
         System.out.println(market.mostValuableStock().getSymbol());
 
-
         System.out.println();
         //task8
         List<Integer> numbers = List.of(1, 2, 3);
@@ -266,5 +265,168 @@ public final class Main {
         while (iterator.hasNext()) {
             System.out.println(iterator.next());
         }
+    }
+
+    public static void Hw4() {
+        List<Animal> animals = new ArrayList<>(List.of(
+            new Animal("Марсель", Animal.Type.CAT, Animal.Sex.M, 3, 30, 5, true),
+            new Animal("Хатико", Animal.Type.DOG, Animal.Sex.M, 12, 64, 41, true),
+            new Animal("Птица говорун", Animal.Type.BIRD, Animal.Sex.M, 30, 15, 1, false),
+            new Animal("Моби Дик", Animal.Type.FISH, Animal.Sex.M, 32, 500, 1500, true),
+            new Animal("Черная вдова", Animal.Type.SPIDER, Animal.Sex.F, 2, 1, 0, true),
+            new Animal("Базилио", Animal.Type.CAT, Animal.Sex.M, 5, 35, 7, false),
+            new Animal("Муму", Animal.Type.DOG, Animal.Sex.M, 6, 35, 30, false),
+            new Animal("Кеша", Animal.Type.BIRD, Animal.Sex.M, 25, 25, 2, false),
+            new Animal("Немо", Animal.Type.FISH, Animal.Sex.M, 10, 15, 0, false),
+            new Animal("Дори", Animal.Type.FISH, Animal.Sex.F, 20, 20, 2, false)
+        ));
+
+        List<Animal> animals2 = new ArrayList<>(List.of(
+            new Animal("Шариков", Animal.Type.DOG, Animal.Sex.M, 40, 40, 35, true),
+            new Animal("Яго", Animal.Type.BIRD, Animal.Sex.M, 14, 20, 2, true),
+            new Animal("Блум", Animal.Type.FISH, Animal.Sex.F, 10, 19, 1, false),
+            new Animal("Флора", Animal.Type.FISH, Animal.Sex.F, 11, 21, 2, false)
+        ));
+
+        List<Animal> animalsForValidate = new ArrayList<>(List.of(
+            new Animal("", Animal.Type.CAT, Animal.Sex.M, 3, 30, 5, true),
+            new Animal("Хатико", Animal.Type.DOG, Animal.Sex.M, -200, 64, 41, true),
+            new Animal("Птица говорун", null, Animal.Sex.M, 30, 15, 1, false),
+            new Animal("Моби Дик", Animal.Type.FISH, null, 32, 500, 1500, true),
+            new Animal("Черная вдова", Animal.Type.SPIDER, Animal.Sex.F, 2, 1, -16925, true),
+            new Animal("Флора", Animal.Type.FISH, Animal.Sex.F, 11, -250505, 2, false),
+            new Animal("Марсель", Animal.Type.CAT, Animal.Sex.M, 3, 30, 5, true)
+        ));
+
+        System.out.println("---Задача 1---");
+        List<Animal> output = AnimalTasks.sortByHeight(animals);
+        for (Animal animal : output) {
+            System.out.println(animal.name() + " - " + animal.height());
+        }
+
+        System.out.println();
+        System.out.println("---Задача 2---");
+        int countFirst = 2;
+        List<Animal> sortedByWeight = AnimalTasks.sortByWeight(animals, countFirst);
+        for (Animal animal : sortedByWeight) {
+            System.out.println(animal.name() + " - " + animal.weight());
+        }
+
+        System.out.println();
+        System.out.println("---Задача 3---");
+        Map<Animal.Type, Long> countedByType = AnimalTasks.countByType(animals);
+        countedByType.forEach((type, count) -> System.out.println(type + " - " + count));
+
+        System.out.println();
+        System.out.println("---Задача 4---");
+        Optional<Animal> longestName = AnimalTasks.getLongestName(animals);
+        longestName.ifPresent(animal -> System.out.println(animal.name()));
+
+        System.out.println();
+        System.out.println("---Задача 5---");
+        String popularGender = AnimalTasks.numberOfAnimalsByGender(animals);
+        System.out.println(popularGender);
+
+        System.out.println();
+        System.out.println("---Задача 6---");
+        Map<Animal.Type, Optional<Animal>> heaviest = AnimalTasks.heaviestByType(animals);
+        heaviest.forEach((type, animal) -> {
+            if (animal.isPresent()) {
+                System.out.println(type + " - " + animal.get().name());
+            } else {
+                System.out.println(type + " - Нет животных этого вида");
+            }
+        });
+
+        System.out.println();
+        System.out.println("---Задача 7---");
+        int age = 2;
+        Animal olderAnimal = AnimalTasks.oldestAnimal(animals, age);
+        System.out.println(olderAnimal);
+
+        System.out.println();
+        System.out.println("---Задача 8---");
+        int height = 20;
+        Optional<Animal> heviest = AnimalTasks.heaviestAnimal(animals, height);
+        heviest.ifPresent(animal -> System.out.println(animal.name()));
+
+        System.out.println();
+        System.out.println("---Задача 9---");
+        int sumPaws = AnimalTasks.sumOfPaws(animals);
+        System.out.println(sumPaws);
+
+        System.out.println();
+        System.out.println("---Задача 10---");
+        List<Animal> different = AnimalTasks.differentPaws(animals);
+        different.forEach(animal -> System.out.println(animal.name()));
+
+        System.out.println();
+        System.out.println("---Задача 11---");
+        List<Animal> biteAndHigh = AnimalTasks.biteAndHighAnimals(animals);
+        biteAndHigh.forEach(animal -> System.out.println(animal.name()));
+
+        System.out.println();
+        System.out.println("---Задача 12---");
+        long weight = AnimalTasks.weightGreaterThanHeightCount(animals);
+        System.out.println(weight);
+
+        System.out.println();
+        System.out.println("---Задача 13---");
+        List<Animal> names = AnimalTasks.namesWithMoreThanTwoWords(animals);
+        if (names.size() > 0) {
+            for (var animal : names) {
+                System.out.println(animal);
+            }
+        } else {
+            System.out.println("Нет таких животных");
+        }
+
+        System.out.println();
+        System.out.println("---Задача 14---");
+        int dogHeight = 35;
+        boolean dog = AnimalTasks.tallDog(animals, dogHeight);
+        if (dog) {
+            System.out.println("В списке есть собака ростом более " + dogHeight + " см");
+        } else {
+            System.out.println("В списке нет собаки ростом более " + dogHeight + " см");
+        }
+
+        System.out.println();
+        System.out.println("---Задача 15---");
+        int minAge = 1;
+        int maxAge = 50;
+        Map<Animal.Type, Integer> totalWeightByType = AnimalTasks.totalWeightByType(animals, minAge, maxAge);
+        totalWeightByType.forEach((type, totalWeight) -> System.out.println(type + " - " + totalWeight));
+
+        System.out.println();
+        System.out.println("---Задача 16---");
+        List<Animal> sorted = AnimalTasks.sortedByTypeSexName(animals);
+        sorted.forEach(animal -> System.out.println(animal.name()));
+
+        System.out.println();
+        System.out.println("---Задача 17---");
+        boolean spidersAndDogs = AnimalTasks.spidersBiteMoreThanDogs(animals);
+        System.out.println(spidersAndDogs);
+
+        System.out.println();
+        System.out.println("---Задача 18---");
+        Optional<Animal> heaviestFish = AnimalTasks.allFish(animals, animals2);
+        heaviestFish.ifPresent(animal -> System.out.println(animal.name()));
+
+        System.out.println();
+        System.out.println("---Задача 19---");
+        AnimalTasks.validation(animalsForValidate);
+
+        System.out.println();
+        System.out.println("---Задача 20---");
+        AnimalTasks.upgradeValidation(animalsForValidate);
+    }
+
+    public static void main(String[] args) {
+        //Hw1();
+        //Hw2();
+        //Hw3();
+        Hw4();
+
     }
 }
